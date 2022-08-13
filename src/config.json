@@ -1,5 +1,12 @@
 {
   "port": 9000,
   "bodyLimit": "100kb",
-  "corsHeaders": ["Link"]
+  "corsHeaders": ["Link"],
+  "db": {
+    "dialect": "mysql",
+    "host": "localhost",
+    "dbname": "education-system",
+    "user": "root",
+    "password": "root"
+  }
 }
