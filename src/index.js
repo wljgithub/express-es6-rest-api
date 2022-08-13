@@ -11,7 +11,11 @@ import config from "./config.json";
 let app = express();
 
 // 加载日志插件
-app.use(morgan("dev"));
+app.use(
+  morgan(
+    `:date[iso] :remote-addr :method :url :status :res[content-length] - :response-time ms`
+  )
+);
 
 // 加载json解析插件
 app.use(
