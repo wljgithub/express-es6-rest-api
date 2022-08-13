@@ -3,6 +3,7 @@ import { Router } from "express";
 import facets from "./facets";
 
 export default ({ config, db }) => {
+  // 初始化路由
   let api = Router();
 
   // mount the facets resource

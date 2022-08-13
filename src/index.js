@@ -7,32 +7,35 @@ import middleware from "./middleware";
 import api from "./api";
 import config from "./config.json";
 
+// 初始化express框架
 let app = express();
 
-// logger
+// 加载日志插件
 app.use(morgan("dev"));
 
-// 3rd party middleware
-app.use(
-  cors({
-    exposedHeaders: config.corsHeaders,
-  })
-);
-
+// 加载json解析插件
 app.use(
   bodyParser.json({
     limit: config.bodyLimit,
   })
 );
 
-// connect to db
+// 加载第三方中间件
+app.use(
+  cors({
+    exposedHeaders: config.corsHeaders,
+  })
+);
+
+// 连接数据库
 initializeDb((db) => {
-  // internal middleware
+  // 加载自定义中间件
   app.use(middleware({ config, db }));
 
-  // api router
+  // 注册所有api 路由
   app.use("/api", api({ config, db }));
 
+  // 启动服务器
   let listener = app.listen(process.env.PORT || config.port, () => {
     console.log(`Started on port ${listener.address().port}`);
   });
