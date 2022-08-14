@@ -8,5 +8,9 @@
     "dbname": "education-system",
     "user": "root",
     "password": "root"
+  },
+  "tencentSdk": {
+    "secretId": "AKIDu0pu4FVjT9NbxU1Z3nYCkSBuYm3Mi2FY",
+    "secretKey": "PYZXRBtQPE1hDkIvaEFEBAGOXp3MizM8"
   }
 }
