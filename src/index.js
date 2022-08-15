@@ -6,6 +6,7 @@ import initializeDb from "./db";
 import middleware from "./middleware";
 import api from "./api";
 import config from "./config.json";
+import { initDataModels } from "./models/user";
 
 // 初始化express框架
 let app = express();
@@ -33,6 +34,9 @@ app.use(
 
 // 连接数据库
 initializeDb((db) => {
+  // 注册所有model
+  initDataModels(db);
+
   // 加载自定义中间件
   app.use(middleware({ config, db }));
 

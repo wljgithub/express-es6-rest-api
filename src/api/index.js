@@ -2,7 +2,8 @@ import { version } from "../../package.json";
 import { Router } from "express";
 import facets from "./facets";
 import user from "./user";
-const { query } = require("express-validator");
+import { registerValidate } from "./validation/user";
+const { query, checkSchema } = require("express-validator");
 
 export default ({ config, db }) => {
   // 初始化路由
@@ -18,6 +19,7 @@ export default ({ config, db }) => {
 
   // 用户相关接口
   api.get("/user/email-code", query("email").isEmail(), user.getEmailCode);
+  api.post("/user/register", checkSchema(registerValidate), user.register(db));
 
   return api;
 };
