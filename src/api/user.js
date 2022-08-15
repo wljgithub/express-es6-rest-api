@@ -66,6 +66,8 @@ export default {
       })
         // 不存在返回注册成功
         .then((data) => {
+          // 如果已经注册成功要删除验证码（每个验证码只能使用一次）
+          delete emailWithCode[email];
           toRes(res, {});
         })
         // 如果已存在则返回用户已存在，如果是其他数据错误则返回服务器错误
