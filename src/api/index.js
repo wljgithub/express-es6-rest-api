@@ -2,7 +2,8 @@ import { version } from "../../package.json";
 import { Router } from "express";
 import facets from "./facets";
 import user from "./user";
-import { registerValidate } from "./validation/user";
+import { loginValidate, registerValidate } from "./validation/user";
+import { dbbrain } from "tencentcloud-sdk-nodejs";
 const { query, checkSchema } = require("express-validator");
 
 export default ({ config, db }) => {
@@ -20,6 +21,7 @@ export default ({ config, db }) => {
   // 用户相关接口
   api.get("/user/email-code", query("email").isEmail(), user.getEmailCode);
   api.post("/user/register", checkSchema(registerValidate), user.register(db));
+  api.post("/user/login", checkSchema(loginValidate), user.login(db));
 
   return api;
 };

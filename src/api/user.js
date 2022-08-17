@@ -3,6 +3,7 @@ import { toRes } from "../lib/res";
 import { validationResult } from "express-validator";
 import { sixRandomDigit } from "../lib/util";
 import { sendEmail } from "../lib/tencent-sdk";
+import QueryTypes from "sequelize";
 import {
   EMAIL_CODE_ERR,
   INTERNAL_SERVER_ERR,
@@ -10,6 +11,7 @@ import {
 } from "../lib/errorno";
 
 const emailWithCode = {};
+const captcha = {};
 
 // let lock = new AsyncLock();
 
@@ -78,6 +80,52 @@ export default {
             console.log(err);
             toRes(res, {}, INTERNAL_SERVER_ERR);
           }
+        });
+    };
+  },
+  login(db) {
+    return (req, res) => {
+      // 校验参数
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      // 接口逻辑
+
+      // 校验前端上传的验证码和生成的图片验证码相同，否则提示错误
+
+      // 1. 从对象中查询验证码
+      let code = captcha[req.body.captchaId];
+      // 2. 判断验证与上传的是否相同
+      if (code != req.body.captcha) {
+        return toRes(res, {}, "验证码错误");
+      }
+      // 验证用户提交的用户名和密码与注册时相同，否则提示用户名或密码错误
+      // 1. 根据上传的用户名从数据库查询用户信息
+      db.query(
+        "select user_name,`password` from user where user_name = :username limit 1",
+        {
+          replacements: { username: req.body.accountName },
+        }
+      )
+        .then((data) => {
+          // 2. 判断上传的用户名和密码是否与数据中的相同,
+          if (
+            data.length > 0 &&
+            data[0].length > 0 &&
+            data[0][0].user_name == req.body.accountName &&
+            data[0][0].password == req.body.password
+          ) {
+            // 如果相同返回成功
+            return toRes(res, {});
+          }
+          return toRes(res, {}, "用户名或密码错误");
+          // 不相同返回用户名或密码错误
+        })
+        .catch((err) => {
+          // 如果服务器错误返回服务器错误
+          console.log(err);
+          return toRes(res, {}, INTERNAL_SERVER_ERR);
         });
     };
   },

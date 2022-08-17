@@ -38,3 +38,14 @@ export const registerValidate = {
     },
   },
 };
+
+export const loginValidate = {
+  captcha: {
+    custom: {
+      options: (value, { req, location, path }) => {
+        return /^[0-9]{4}$/.test(value);
+      },
+      errorMessage: "必须是4位数字",
+    },
+  },
+};
