@@ -27,12 +27,11 @@ export function toRes(res, data = {}, errType) {
     message: "OK",
   };
   // 如果出错，返回对应的错误信息给客户端
-  if (errType && errorCode.hasOwnProperty(errType)) {
-    let httpstatus = errorCode[errType].httpstatus
-      ? errorCode[errType].httpstatus
-      : 500;
-    resData.code = errorCode[errType].code;
-    resData.message = errorCode[errType].message;
+  if (errType) {
+    let errorNo = errorCode[errType];
+    let httpstatus = errorNo && errorNo.httpstatus ? errorNo.httpstatus : 500;
+    resData.code = errorNo && errorNo.code ? errorNo.code : 5000;
+    resData.message = errorNo && errorNo.message ? errorNo.message : errType;
 
     res.status(httpstatus).json(resData);
   } else {
