@@ -22,6 +22,6 @@ export default ({ config, db }) => {
   api.get("/user/email-code", query("email").isEmail(), user.getEmailCode);
   api.post("/user/register", checkSchema(registerValidate), user.register(db));
   api.post("/user/login", checkSchema(loginValidate), user.login(db));
-
+  api.get("/user/captcha", user.getCaptcha);
   return api;
 };

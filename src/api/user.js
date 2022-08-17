@@ -1,14 +1,14 @@
 import { toRes } from "../lib/res";
 // import AsyncLock from "async-lock";
 import { validationResult } from "express-validator";
-import { sixRandomDigit } from "../lib/util";
+import { fourRandomDight, sixRandomDigit } from "../lib/util";
 import { sendEmail } from "../lib/tencent-sdk";
-import QueryTypes from "sequelize";
 import {
   EMAIL_CODE_ERR,
   INTERNAL_SERVER_ERR,
   USER_EXISTS,
 } from "../lib/errorno";
+import { generateCaptcha } from "../lib/image-captcha";
 
 const emailWithCode = {};
 const captcha = {};
@@ -128,5 +128,15 @@ export default {
           return toRes(res, {}, INTERNAL_SERVER_ERR);
         });
     };
+  },
+  getCaptcha(req, res) {
+    // 校验参数
+    // 1. 生成四位随机数
+    let num = fourRandomDight();
+    // 2. 生成一张图片
+    let image = generateCaptcha(num);
+    // 3/ 将随机数存储起来
+    captcha[num] = num;
+    return toRes(res, { captcha: image });
   },
 };
