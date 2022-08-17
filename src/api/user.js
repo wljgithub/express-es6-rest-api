@@ -117,6 +117,7 @@ export default {
             data[0][0].password == req.body.password
           ) {
             // 如果相同返回成功
+            delete captcha[req.body.captcha];
             return toRes(res, {});
           }
           return toRes(res, {}, "用户名或密码错误");
