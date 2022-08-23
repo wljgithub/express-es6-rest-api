@@ -2,10 +2,10 @@ export const registerValidate = {
   accountName: {
     custom: {
       options: (value, { req, location, path }) => {
-        return /[0-9]/.test(value) && /[a-z]/i.test(value);
+        return /[0-9a-z]/i.test(value);
       },
     },
-    errorMessage: "accountName 必须是字母和数字的组合",
+    errorMessage: "accountName 必须是字母或数字的组合",
   },
   password: {
     custom: {
