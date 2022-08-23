@@ -95,7 +95,7 @@ export default {
       // 校验前端上传的验证码和生成的图片验证码相同，否则提示错误
 
       // 1. 从对象中查询验证码
-      let code = captcha[req.body.captchaId];
+      let code = captcha[req.body.captcha];
       // 2. 判断验证与上传的是否相同
       if (code != req.body.captcha) {
         return toRes(res, {}, "验证码错误");
@@ -138,6 +138,6 @@ export default {
     let image = generateCaptcha(num);
     // 3/ 将随机数存储起来
     captcha[num] = num;
-    return toRes(res, { captcha: image });
+    return toRes(res, { captcha: `data:image/jpeg;base64,${image}` });
   },
 };
